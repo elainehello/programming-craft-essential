@@ -1,6 +1,6 @@
 """
 Protocol offers a more flexible approach than ABCs, aka structural duck typing,
-where an onject is consider valid if it has certain attributes or methods, regardless
+where an object is considered valid if it has certain attributes or methods, regardless
 of its actual inheritance.
 
 Allows type checking at compile time, it makes programs more robust and easier to debug.
