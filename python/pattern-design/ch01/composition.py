@@ -13,6 +13,6 @@ class Car:
         print("Car Started!")
 
 if __name__ == "__main__":
-    my_car = Car()
-    my_car.start()
-    
+    # my_car = Car()
+    # my_car.start()
+    Car().start()
