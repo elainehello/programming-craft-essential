@@ -1,7 +1,7 @@
 """
-OCP (Open-Closed Principle) states that software entities should be open for extension
-but closed for modification. You can add new functionality by creating new classes
-that implement the same interface, without changing existing code.
+OCP (Open-Closed Principle) states that software entities such as classes and modules
+should be open for extension but closed for modification. You can add new functionality
+by creating new classes that implement the same interface, without changing existing code.
 """
 
 import math
@@ -32,7 +32,7 @@ def calculate_area(shape: Shape) -> float:
 if __name__ == "__main__":
     rectangle = Rectangle(10, 25)
     rect_area = calculate_area(rectangle)
-    print(f"Rectangle area: {rect_area}")
+    print(f"Rectangle area: {rect_area:.2f}")
 
     circle = Circle(4.2)
     circle_area = calculate_area(circle)
