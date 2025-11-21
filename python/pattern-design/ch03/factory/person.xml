@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persons>
+  <person>
+    <firstName>John</firstName>
+    <lastName>Smith</lastName>
+    <genre>Male</genre>
+    <address>
+      <streetAddress>123 Main Street</streetAddress>
+      <city>New York</city>
+      <state>NY</state>
+      <postalCode>10001</postalCode>
+    </address>
+    <phoneNumbers>
+      <phoneNumber type="home">555-123-4567</phoneNumber>
+      <phoneNumber type="mobile">555-987-6543</phoneNumber>
+    </phoneNumbers>
+  </person>
+  
+  <person>
+    <firstName>Maria</firstName>
+    <lastName>Garcia</lastName>
+    <genre>Female</genre>
+    <address>
+      <streetAddress>456 Oak Avenue</streetAddress>
+      <city>Los Angeles</city>
+      <state>CA</state>
+      <postalCode>90210</postalCode>
+    </address>
+    <phoneNumbers>
+      <phoneNumber type="home">555-246-8135</phoneNumber>
+      <phoneNumber type="work">555-369-2580</phoneNumber>
+    </phoneNumbers>
+  </person>
+  
+  <person>
+    <firstName>Michael</firstName>
+    <lastName>Johnson</lastName>
+    <genre>Male</genre>
+    <address>
+      <streetAddress>789 Pine Road</streetAddress>
+      <city>Chicago</city>
+      <state>IL</state>
+      <postalCode>60601</postalCode>
+    </address>
+    <phoneNumbers>
+      <phoneNumber type="mobile">555-147-2583</phoneNumber>
+      <phoneNumber type="work">555-741-9630</phoneNumber>
+    </phoneNumbers>
+  </person>
+</persons>
