@@ -14,7 +14,7 @@ class ListOperation(Protocol):
     def append(self, data: Any) -> None:
         ...
 
-    def preped(self, data: Any) -> None:
+    def prepend(self, data: Any) -> None:
         ...
 
     def remove(self, data: Any) -> bool:
