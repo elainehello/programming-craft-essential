@@ -53,9 +53,6 @@ class Indexable(Protocol):
     def remove_at(self, index: int) -> Any:
         ...
 
-    def _get_node_at(self, index: int) -> Node[Any]:
-        ...
-
 class Iterable(Protocol):
     def __iter__(self) -> Iterator[Any]:
         ...
