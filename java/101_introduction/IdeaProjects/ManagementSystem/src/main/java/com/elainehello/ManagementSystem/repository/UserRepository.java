@@ -2,9 +2,11 @@ package com.elainehello.ManagementSystem.repository;
 
 import com.elainehello.ManagementSystem.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     // Find user by email (returns 'Optional' to avoid NullPointerException)
