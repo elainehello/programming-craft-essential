@@ -56,12 +56,19 @@ public class UserService {
                 .orElse(List.of());
     }
 
-    // Find Users by first and last name
+    // Find Users by first and/or last name
     public List<User> getUsersByFullName(String firstName, String lastName) {
-        return Optional.ofNullable(firstName)
-                .flatMap(f -> Optional.ofNullable(lastName)
-                .map(l -> userRepository.findByFirstNameAndLastName(f, l)))
-                .orElse(List.of());
+        if (firstName != null && lastName != null) {
+            return userRepository
+                    .findByFirstNameAndLastName(firstName, lastName);
+        } else if (firstName != null) {
+            return userRepository.findByFirstName(firstName);
+        }
+        else if (lastName != null) {
+            return userRepository.findByLastName(lastName);
+        } else {
+            return userRepository.findAll();
+        }
     }
 
     // Delete user by ID
