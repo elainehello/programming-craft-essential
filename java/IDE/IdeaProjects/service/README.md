@@ -122,40 +122,115 @@ spring.datasource.password=mypassword
 
 ## GraalVM Native Image
 
-### Why Use Native Images?
+### What's Inside the Native Executable?
 
-1. **Fast Startup**: Milliseconds vs seconds
-2. **Lower Memory Usage**: No JVM overhead
-3. **Self-Contained**: No Java runtime required
-4. **Container Friendly**: Smaller images, faster cold starts
+The 113MB native executable is a **completely self-contained binary** that includes:
 
-### Performance Comparison
+#### Core Runtime Components (~40MB)
+
+- **Substrate VM**: GraalVM's lightweight runtime (replaces the JVM)
+- **Garbage Collector**: Serial GC for memory management
+- **Memory Management**: Heap and stack management
+- **Thread Management**: Native threading support
+- **JNI Support**: Java Native Interface for system calls
+
+#### Application Framework (~35MB)
+
+- **Spring Boot Framework**: Core Spring container, auto-configuration, and lifecycle management
+- **Spring Data JDBC**: Database abstraction and repository implementations
+- **Spring Web MVC**: Web framework, servlet container, and request handling
+- **Embedded Tomcat**: Full web server (Catalina engine, connectors, JSP support)
+
+#### Dependencies & Libraries (~25MB)
+
+- **H2 Database Engine**: Complete embedded SQL database
+- **PostgreSQL JDBC Driver**: Database connectivity
+- **Jackson JSON**: Serialization/deserialization
+- **Spring Boot Actuator**: Monitoring and management endpoints
+- **HikariCP**: Connection pooling
+- **Logging Framework**: SLF4J and Logback
+
+#### Application Code & Resources (~8MB)
+
+- **Your Application**: Compiled business logic
+- **Configuration Files**: application.properties, SQL scripts
+- **Static Resources**: Any bundled assets
+
+#### Reflection Metadata & AOT (~5MB)
+
+- **Pre-computed Reflection**: All reflection calls resolved at compile time
+- **Native Image Metadata**: Configuration for native compilation
+- **Ahead-of-Time Optimizations**: Pre-compiled and optimized code paths
+
+### Size Comparison Analysis
 
 ```bash
-# Native executable startup
-time ./target/service
-# Typical startup: ~50-100ms
+# Check the native executable size
+du -hs ./target/service
+# Output: 113M
 
-# JVM startup
-time java -jar target/service-0.0.1-SNAPSHOT.jar
-# Typical startup: ~2-5 seconds
+# Compare with JAR file
+du -hs ./target/service-0.0.1-SNAPSHOT.jar
+# Output: ~25M (but needs JVM)
+
+# Typical JVM installation size
+# OpenJDK 21: ~300-400MB
+# Total JVM deployment: ~325-425MB
 ```
 
-### File Sizes
+### Performance Benefits vs Size Trade-off
 
-- **Native executable**: ~112MB (includes everything)
-- **JAR file**: ~25MB (requires JVM)
-- **JVM + JAR total**: ~200MB+ (JVM installation + JAR)
+| Metric           | Native Image | JVM + JAR                |
+| ---------------- | ------------ | ------------------------ |
+| **File Size**    | 113MB        | ~350MB (JVM + JAR)       |
+| **Startup Time** | ~50-100ms    | ~2-5 seconds             |
+| **Memory Usage** | ~20-50MB     | ~100-200MB               |
+| **Cold Start**   | Instant      | JVM warmup required      |
+| **Distribution** | Single file  | JVM + JAR + dependencies |
+
+### Why Native Images Are Worth It
+
+1. **Deployment Simplicity**: Single executable file, no JVM installation needed
+2. **Container Optimization**:
+
+   ```dockerfile
+   # Native image container
+   FROM scratch
+   COPY service /service
+   ENTRYPOINT ["/service"]
+   # Final image: ~115MB
+
+   # vs JVM container
+   FROM openjdk:21-jre
+   COPY service.jar /app.jar
+   ENTRYPOINT ["java", "-jar", "/app.jar"]
+   # Final image: ~400-500MB
+   ```
+
+3. **Cloud & Serverless**: Perfect for AWS Lambda, Google Cloud Run, Azure Functions
+4. **Microservices**: Faster scaling, lower resource consumption
+5. **Edge Computing**: Suitable for resource-constrained environments
 
 ### Build Process Breakdown
 
 The native compilation process includes:
 
-1. **Analysis**: Finding all reachable code
-2. **Universe Building**: Creating the closed world
-3. **Method Parsing/Inlining**: Optimizations
-4. **Compilation**: Native code generation
-5. **Image Creation**: Final executable
+1. **Analysis** (46.8s): Finding all reachable code paths
+
+   - 24,088 reachable types (90.6% of total)
+   - 38,614 reachable fields (64.7% of total)
+   - 115,183 reachable methods (63.4% of total)
+
+2. **Universe Building** (10.5s): Creating the closed world assumption
+3. **Method Parsing/Inlining** (4.1s + 5.3s): Code optimizations
+4. **Compilation** (49.7s): Converting to native machine code
+5. **Image Creation** (10.6s): Final executable assembly
+
+**Final breakdown:**
+
+- **Code area**: 56.38MB (50.20%) - Your compiled application code
+- **Image heap**: 51.80MB (46.12%) - Objects and resources
+- **Other data**: 4.14MB (3.68%) - Metadata and runtime info
 
 ## Profiles
 
@@ -228,6 +303,9 @@ java -version
 
 # Run with specific profile
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Analyze native image size
+./mvnw -Pnative native:compile -Dverbose
 ```
 
 ## Contributing
