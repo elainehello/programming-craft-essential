@@ -49,12 +49,14 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+        <!-- ## TO USE LATER
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-docker-compose</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
