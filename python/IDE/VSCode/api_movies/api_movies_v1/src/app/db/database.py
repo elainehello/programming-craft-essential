@@ -4,8 +4,7 @@ Configured to work with Docker Compose PostgreSQL container.
 """
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 # Database connection configuration
 # These should match your .env file variables used in docker-compose.yml
@@ -38,7 +37,8 @@ SessionLocal = sessionmaker(
 )
 
 # Base class for our models
-Base = declarative_base()
+class Base(DeclarativeBase):
+    pass
 
 # Dependency for FastAPI to get database session
 def get_db():
