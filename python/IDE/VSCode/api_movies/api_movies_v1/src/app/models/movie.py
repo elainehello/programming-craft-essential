@@ -1,23 +1,43 @@
-from sqlalchemy import Column, Integer, String, Text, Numeric, BigInteger
-from ..db.database import Base
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
-class Movie(Base):
-    __tablename__ = "movies"
+class MovieBase(SQLModel):
+    series_title: str = Field(index=True)
+    released_year: Optional[int] = None
+    certificate: Optional[str] = None
+    runtime: Optional[str] = None
+    genre: Optional[str] = Field(index=True)
+    imdb_rating: Optional[float] = None
+    overview: Optional[str] = None
+    director: Optional[str] = None
+    star1: Optional[str] = None
+    star2: Optional[str] = None
+    star3: Optional[str] = None
+    star4: Optional[str] = None
+    no_of_votes: Optional[int] = None
+    gross: Optional[str] = None
 
-    id = Column(Integer, primary_key=True, index=True)
-    poster_link = Column(Text, nullable=True)
-    series_title = Column(String, nullable=False, index=True)
-    released_year = Column(Integer, nullable=True)
-    certificate = Column(String(20), nullable=True)
-    runtime = Column(String(50), nullable=True)
-    genre = Column(Text, nullable=True)
-    imdb_rating = Column(Numeric(3,1), nullable=True)
-    overview = Column(Text, nullable=True)
-    meta_score = Column(Integer, nullable=True)
-    director = Column(Text, nullable=True)
-    star1 = Column(Text, nullable=True)
-    star2 = Column(Text, nullable=True)
-    star3 = Column(Text, nullable=True)
-    star4 = Column(Text, nullable=True)
-    no_of_votes = Column(BigInteger, nullable=True)
-    gross = Column(BigInteger, nullable=True)
+class Movie(MovieBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
+class MovieCreate(MovieBase):
+    pass
+
+class MovieRead(MovieBase):
+    id: int
+
+class MovieUpdate(SQLModel):
+    series_title: Optional[str] = None
+    released_year: Optional[int] = None
+    certificate: Optional[str] = None
+    runtime: Optional[str] = None
+    genre: Optional[str] = None
+    imdb_rating: Optional[float] = None
+    overview: Optional[str] = None
+    director: Optional[str] = None
+    star1: Optional[str] = None
+    star2: Optional[str] = None
+    star3: Optional[str] = None
+    star4: Optional[str] = None
+    no_of_votes: Optional[int] = None
+    gross: Optional[str] = None
