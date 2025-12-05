@@ -1,0 +1,7 @@
+C++
+
+run:
+/# g++ [file.cpp] -o [object name]
+
+execute file:
+/# ./[object name]
