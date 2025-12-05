@@ -6,7 +6,7 @@
 int main()
 {
     std::cout << "Starting application..." << std::endl;
-    
+
     int width = 800;
     int height = 600;
     std::string title = "Lego Plot";
@@ -25,7 +25,7 @@ int main()
         // Swap front and back buffers
         window.swapBuffers();
     }
-    
+
     std::cout << "Exiting application..." << std::endl;
 
     return 0;

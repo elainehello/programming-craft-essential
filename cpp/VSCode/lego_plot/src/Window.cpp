@@ -37,9 +37,9 @@ namespace core
         const GLFWvidmode *mode = glfwGetVideoMode(monitor);
         int x_axis = (mode->width - width) / 2;
         int y_axis = (mode->height - height) / 2;
-        glfwSetWindowPos(m_window, x_axis, y_axis);        // Makes the context of the specified window current for the calling thread.
+        glfwSetWindowPos(m_window, x_axis, y_axis); // Makes the context of the specified window current for the calling thread.
         glfwMakeContextCurrent(m_window);
-        
+
         std::cout << "Window setup complete!" << std::endl;
     }
 
