@@ -1,3 +1,17 @@
 Install GLFW development libraries
 run:
 /# sudo apt-get install libglfw3-dev
+
+
+-------------------------------
+build project:
+root directory
+/# mkdir -p build
+/# cd build
+/# cmake ..
+/# make
+/# ./[project name defined in CMakeLists]
+
+Required package:
+/# sudo apt update && sudo apt install -y libwayland-dev libxkbcommon-dev libwayland-cursor0 libwayland-egl1
+
