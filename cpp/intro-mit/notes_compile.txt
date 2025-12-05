@@ -5,3 +5,11 @@ run:
 
 execute file:
 /# ./[object name]
+
+
+----------------------
+sites man reference
+https://en.cppreference.com/
+https://cplusplus.com/
+
+----------------------
