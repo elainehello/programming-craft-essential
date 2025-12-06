@@ -1,10 +1,16 @@
 #include "../inc/Window.hpp"
+#include <glad/glad.h> // GLAD must be included before other OpenGL headers
 #include <iostream>
 #include <cstdlib>
-#include <GL/gl.h>
 
 namespace core
 {
+    // Helper function to adapt GLFW's function pointer to GLAD's expected type
+    static void *gladGetProcWrapper(const char *name)
+    {
+        return (void *)glfwGetProcAddress(name);
+    }
+
     Window::Window(int width, int height, const std::string &title)
         : m_width(width), m_height(height), m_title(title)
     {
@@ -18,8 +24,8 @@ namespace core
 
         // Sets the specified window hint to the desired value.
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         std::cout << "Creating GLFW window..." << std::endl;
         // Creates a window and its associated context.
@@ -39,6 +45,16 @@ namespace core
         int y_axis = (mode->height - height) / 2;
         glfwSetWindowPos(m_window, x_axis, y_axis); // Makes the context of the specified window current for the calling thread.
         glfwMakeContextCurrent(m_window);
+
+        // Initialize GLAD with a wrapper function
+        if (!gladLoadGLLoader(gladGetProcWrapper))
+        {
+            std::cerr << "Failed to initialize GLAD\n";
+            std::exit(EXIT_FAILURE);
+        }
+
+        // Set up OpenGL viewport
+        glViewport(0, 0, width, height);
 
         std::cout << "Window setup complete!" << std::endl;
     }

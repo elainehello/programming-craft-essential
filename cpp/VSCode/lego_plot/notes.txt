@@ -15,3 +15,10 @@ root directory
 Required package:
 /# sudo apt update && sudo apt install -y libwayland-dev libxkbcommon-dev libwayland-cursor0 libwayland-egl1
 
+Required package: // trashy
+GLM (OpenGL Mathematics) library
+/# sudo apt update && sudo apt install libglm-dev
+
+Required package:
+GLAD modern OpenGL features
+/# sudo apt update && sudo apt install libglad-dev

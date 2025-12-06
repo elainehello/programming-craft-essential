@@ -13,12 +13,14 @@ find_package(OpenGL REQUIRED)
 
 # Include directories
 include_directories(inc)
+include_directories(external)
 
 # Add executable
 add_executable(LegoPlot
     src/main.cpp
     src/Window.cpp
     src/Shader.cpp
+    external/glad/glad.c
 )
 
 # Link libraries
