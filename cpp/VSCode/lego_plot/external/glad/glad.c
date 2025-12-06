@@ -34,29 +34,32 @@ PFNGLUNIFORM1IPROC glad_glUniform1i = NULL;
 PFNGLUNIFORM3FVPROC glad_glUniform3fv = NULL;
 PFNGLUNIFORMMATRIX4FVPROC glad_glUniformMatrix4fv = NULL;
 
-static void* get_proc(const char *namez);
+static void *get_proc(const char *namez);
 static GLADloadproc glad_get_proc_from_userptr;
 
-static void* get_proc(const char *namez) {
+static void *get_proc(const char *namez)
+{
     return glad_get_proc_from_userptr(namez);
 }
 
-int gladLoadGLLoader(GLADloadproc load) {
+int gladLoadGLLoader(GLADloadproc load)
+{
     glad_get_proc_from_userptr = load;
-    
-    if(load == NULL) return 0;
-    
+
+    if (load == NULL)
+        return 0;
+
     glad_glClear = (PFNGLCLEARPROC)load("glClear");
     glad_glClearColor = (PFNGLCLEARCOLORPROC)load("glClearColor");
     glad_glViewport = (PFNGLVIEWPORTPROC)load("glViewport");
-    
+
     glad_glCreateShader = (PFNGLCREATESHADERPROC)load("glCreateShader");
     glad_glShaderSource = (PFNGLSHADERSOURCEPROC)load("glShaderSource");
     glad_glCompileShader = (PFNGLCOMPILESHADERPROC)load("glCompileShader");
     glad_glGetShaderiv = (PFNGLGETSHADERIVPROC)load("glGetShaderiv");
     glad_glGetShaderInfoLog = (PFNGLGETSHADERINFOLOGPROC)load("glGetShaderInfoLog");
     glad_glDeleteShader = (PFNGLDELETESHADERPROC)load("glDeleteShader");
-    
+
     glad_glCreateProgram = (PFNGLCREATEPROGRAMPROC)load("glCreateProgram");
     glad_glAttachShader = (PFNGLATTACHSHADERPROC)load("glAttachShader");
     glad_glLinkProgram = (PFNGLLINKPROGRAMPROC)load("glLinkProgram");
@@ -64,12 +67,12 @@ int gladLoadGLLoader(GLADloadproc load) {
     glad_glGetProgramInfoLog = (PFNGLGETPROGRAMINFOLOGPROC)load("glGetProgramInfoLog");
     glad_glUseProgram = (PFNGLUSEPROGRAMPROC)load("glUseProgram");
     glad_glDeleteProgram = (PFNGLDELETEPROGRAMPROC)load("glDeleteProgram");
-    
+
     glad_glGetUniformLocation = (PFNGLGETUNIFORMLOCATIONPROC)load("glGetUniformLocation");
     glad_glUniform1f = (PFNGLUNIFORM1FPROC)load("glUniform1f");
     glad_glUniform1i = (PFNGLUNIFORM1IPROC)load("glUniform1i");
     glad_glUniform3fv = (PFNGLUNIFORM3FVPROC)load("glUniform3fv");
     glad_glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC)load("glUniformMatrix4fv");
-    
+
     return 1;
 }
