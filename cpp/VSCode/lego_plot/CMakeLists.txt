@@ -18,6 +18,7 @@ include_directories(inc)
 add_executable(LegoPlot
     src/main.cpp
     src/Window.cpp
+    src/Shader.cpp
 )
 
 # Link libraries
