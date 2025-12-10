@@ -68,3 +68,5 @@ int main(int argc, char **argv)
     printf("Final value: %d\n", counter);
     return 0;
 }
+
+/* /# gcc threads.c -o threads -Wall -lpthread */
