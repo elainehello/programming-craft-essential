@@ -13,7 +13,8 @@ def main() -> None:
     print(f"[instance creation]: {chubby}")
     print(f"[docstring]: {(chubby.__doc__ or "").replace("\n", "")}")
     print(f"[is_human attribute]: {chubby.is_human}")
-    print(f"[owner]: {chubby.owner}")
+    print(f"[owner attribute]: {chubby.owner}")
+    print(f"[height attribute]: {chubby.height}")
 
 if __name__ == "__main__":
     main()
