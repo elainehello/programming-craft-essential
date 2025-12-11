@@ -7,6 +7,8 @@ import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import java.util.Map;
+
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 import static org.springframework.web.servlet.function.ServerResponse.ok;
 
@@ -21,6 +23,7 @@ public class ServiceApplication {
     RouterFunction<ServerResponse> myRoutes(CustomerRepository customerRepository) {
         return route()
                 .GET("/customers", req -> ok().body(customerRepository.findAll()))
+                .GET("hello", req -> ok().body(Map.of("message", "Hello World!")))
                 .build();
     }
 }
