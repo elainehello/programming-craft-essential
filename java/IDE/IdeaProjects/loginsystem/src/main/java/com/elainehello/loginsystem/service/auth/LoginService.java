@@ -16,7 +16,7 @@ public class LoginService {
         String userId = "user-123";
 
         String token = sessionService.createAccessToken(userId);
-        long expiresIn = sessionService.getExpiresIn();
+        long expiresIn = sessionService.getExpireIn();
 
         return new LoginResponse(token, expiresIn);
     }

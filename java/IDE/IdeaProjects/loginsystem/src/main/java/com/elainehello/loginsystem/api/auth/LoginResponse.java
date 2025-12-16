@@ -7,7 +7,7 @@ public class LoginResponse {
     @JsonProperty("access_token")
     private String accessToken;
 
-    // (?) when to use 'final' properties/atributtes
+    // (?) when to use 'final' properties/attributes
     @JsonProperty("expires_in")
     private long expiresIn;
 
