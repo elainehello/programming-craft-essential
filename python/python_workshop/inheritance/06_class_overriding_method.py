@@ -23,7 +23,7 @@ class CustomDiary(Diary):
         birthday: datetime.date,
         christmas: datetime.date,
         date_format: str = "%d/%m/%y") -> None:
-        super().__init__(birthday, christmas)
+        super().__init__(birthday, christmas) #super() calls the parent class's constructor from the child class
         self.date_format = date_format
 
     def format_date(self, date: datetime.date) -> str:
