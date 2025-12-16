@@ -1,49 +1,53 @@
 # Login System
 
-A secure login system built with Spring Boot, PostgreSQL, and Redis for session management.
+A secure authentication system built with Spring Boot, PostgreSQL, and Redis for session management.
 
 ## 🏗️ Architecture
 
-This project follows a clean architecture pattern with clear separation of concerns:
-
 ```
 src/main/java/com/elainehello/loginsystem/
-├── api/auth/                 # REST API layer
-│   ├── LoginController.java  # Login endpoint
-│   ├── LogoutController.java # Logout endpoint
-│   ├── LoginRequest.java     # Login request DTO
-│   └── LoginResponse.java    # Login response DTO
-├── service/auth/            # Business logic layer
-│   ├── LoginService.java    # Authentication logic
-│   └── SessionService.java  # Token management
-├── repository/              # Data access layer
-│   └── UserRepository.java  # User data operations
-├── entity/                  # Data models
-│   └── User.java           # User entity
-├── config/                  # Configuration
-│   ├── SecurityConfig.java  # Spring Security config
-│   └── PasswordConfig.java  # Password encoder config
-└── exception/               # Exception handling
-    └── GlobalExceptionHandler.java
+├── api/auth/                    # REST API layer
+│   ├── LoginController.java     # Login endpoint
+│   ├── RegistrationController.java # Registration endpoint
+│   ├── LogoutController.java    # Logout endpoint
+│   ├── LoginRequest.java        # Auth request DTO (login & registration)
+│   └── LoginResponse.java       # Login response DTO
+├── service/auth/               # Business logic layer
+│   ├── LoginService.java       # Authentication logic
+│   ├── RegistrationService.java # User registration logic
+│   └── SessionService.java     # Redis token management
+├── repository/                 # Data access layer
+│   └── UserRepository.java     # User data operations
+├── entity/                     # Data models
+│   └── User.java              # User entity with Lombok
+├── config/                     # Configuration
+│   ├── SecurityConfig.java     # Spring Security config
+│   ├── PasswordConfig.java     # BCrypt password encoder
+│   └── RedisConfig.java        # Redis template config
+├── exception/                  # Error handling
+│   └── GlobalExceptionHandler.java # Centralized exception handling
+└── service/
+    └── DataInitializer.java    # Test data creation
+compose.yaml                    # Docker Compose services definition
 ```
 
 ## 🚀 Features
 
-- **User Authentication**: Email/password login with BCrypt encryption
-- **Session Management**: Token-based authentication with configurable expiration
-- **Input Validation**: Request validation with detailed error messages
-- **Security**: Spring Security integration with CSRF protection disabled for API
-- **Database**: PostgreSQL with JPA/Hibernate for user persistence
-- **Testing**: Testcontainers integration for isolated testing
-- **Exception Handling**: Global exception handler for consistent API responses
+- **Complete Authentication Flow**: Registration → Login → Session Management → Logout
+- **Security**: BCrypt password hashing, input validation, secure session tokens
+- **Redis Session Management**: Token-based authentication with automatic expiration
+- **Docker Compose Integration**: One-command development environment setup
+- **Input Validation**: Comprehensive validation with detailed error responses
+- **Global Exception Handling**: Consistent API error responses
+- **Test Data**: Automatic test user creation for development
 
 ## 🛠️ Technology Stack
 
 - **Framework**: Spring Boot 4.0.0
-- **Security**: Spring Security
-- **Database**: PostgreSQL
-- **Cache/Session**: Redis
-- **ORM**: JPA/Hibernate
+- **Security**: Spring Security with BCrypt
+- **Database**: PostgreSQL with JPA/Hibernate
+- **Session Store**: Redis with Spring Data Redis
+- **Containerization**: Docker Compose
 - **Validation**: Jakarta Bean Validation
 - **Testing**: JUnit 5, Testcontainers
 - **Build Tool**: Maven
@@ -51,57 +55,102 @@ src/main/java/com/elainehello/loginsystem/
 ## 📋 Prerequisites
 
 - Java 21
-- PostgreSQL 12+
-- Redis 6+
+- Docker & Docker Compose
 - Maven 3.6+
 
-## 🔧 Setup & Installation
-
-### 1. Clone the repository
+## 🚀 Quick Start
 
 ```bash
+# Clone and start
 git clone <repository-url>
 cd loginsystem
-```
 
-### 2. Configure Database
-
-Update [`application.properties`](src/main/resources/application.properties):
-
-```properties
-# Database Configuration
-spring.datasource.url=jdbc:postgresql://localhost:5432/loginsystem
-spring.datasource.username=your_username
-spring.datasource.password=your_password
-
-# Redis Configuration
-spring.data.redis.host=localhost
-spring.data.redis.port=6379
-```
-
-### 3. Create Database
-
-```bash
-sudo -u postgres createdb loginsystem
-```
-
-### 4. Run the application
-
-```bash
+# Start application (Docker Compose auto-starts PostgreSQL & Redis)
 ./mvnw spring-boot:run
 ```
 
-The application will start on `http://localhost:8080`
+**That's it!** The application starts on `http://localhost:8080` with:
+
+- PostgreSQL database automatically created
+- Redis session store ready
+- Test user: `test@example.com` / `password123`
+
+## 🐳 Docker Compose Configuration
+
+The [`compose.yaml`](compose.yaml) file defines the development infrastructure:
+
+### **Purpose & Benefits**
+
+- **Zero Setup**: No need to manually install PostgreSQL or Redis
+- **Consistent Environment**: All developers use identical database versions
+- **Automatic Lifecycle**: Services start/stop with your Spring Boot application
+- **Data Persistence**: Database data survives container restarts via volumes
+- **Isolation**: No conflicts with existing local database installations
+
+### **Services Defined**
+
+```yaml
+services:
+  postgres:
+    image: postgres:15-alpine # Lightweight PostgreSQL
+    environment:
+      POSTGRES_USER: loginsystem # Database user
+      POSTGRES_PASSWORD: password123 # Database password
+      POSTGRES_DB: loginsystem # Database name
+    ports:
+      - "5432:5432" # Expose on localhost:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistent storage
+
+  redis:
+    image: redis:7-alpine # Lightweight Redis
+    ports:
+      - "6379:6379" # Expose on localhost:6379
+    volumes:
+      - redis_data:/data # Persistent session data
+```
+
+### **Spring Boot Integration**
+
+Thanks to `spring-boot-docker-compose` dependency:
+
+- **Auto-Detection**: Spring Boot automatically discovers running containers
+- **Auto-Configuration**: Database and Redis connections configured automatically
+- **No Manual Setup**: No need to start containers manually
+- **Smart Management**: Containers start only when needed
+
+### **Development Workflow**
+
+```bash
+# Start development (containers auto-start)
+./mvnw spring-boot:run
+
+# Stop development (containers auto-stop)
+# Ctrl+C
+
+# Reset all data (fresh start)
+docker compose down -v
+./mvnw spring-boot:run
+```
 
 ## 📡 API Endpoints
 
-### Authentication
+### **POST `/api/v1/auth/register`**
 
-#### POST `/api/v1/auth/login`
+Create a new user account.
 
-Authenticate a user and return access token.
+```json
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "firstName": "John",
+  "lastName": "Doe"
+}
+```
 
-**Request:**
+### **POST `/api/v1/auth/login`**
+
+Authenticate and receive access token.
 
 ```json
 {
@@ -119,148 +168,58 @@ Authenticate a user and return access token.
 }
 ```
 
-**Status Codes:**
+### **POST `/api/v1/auth/logout`**
 
-- `200 OK` - Login successful
-- `400 Bad Request` - Invalid credentials or validation errors
-- `401 Unauthorized` - Authentication failed
+Invalidate session token.
 
-#### POST `/api/v1/auth/logout`
-
-Logout user and invalidate token.
-
-**Headers:**
-
-```
-Authorization: Bearer <access_token>
-```
-
-**Response:**
-
-```
-200 OK
-```
-
-## 🗄️ Database Schema
-
-### Users Table
-
-```sql
-CREATE TABLE users (
-    id BIGSERIAL PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    first_name VARCHAR(255) NOT NULL,
-    last_name VARCHAR(255) NOT NULL,
-    active BOOLEAN NOT NULL DEFAULT true
-);
-```
+**Headers:** `Authorization: Bearer <access_token>`
 
 ## 🧪 Testing
 
-### Run Tests
-
 ```bash
+# Run tests with Testcontainers
 ./mvnw test
-```
 
-### Test with cURL
+# Test registration
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"new@user.com","password":"password123","firstName":"New","lastName":"User"}'
 
-```bash
-# Login
+# Test login
 curl -X POST http://localhost:8080/api/v1/auth/login \
   -H "Content-Type: application/json" \
-  -d '{
-    "email": "test@example.com",
-    "password": "password123"
-  }'
+  -d '{"email":"test@example.com","password":"password123"}'
 
-# Logout
+# Test logout
 curl -X POST http://localhost:8080/api/v1/auth/logout \
   -H "Authorization: Bearer <your-token>"
 ```
 
 ## 🔒 Security Features
 
-- **Password Encryption**: BCrypt with salt rounds
-- **Input Validation**: Email format, password strength validation
-- **CSRF Protection**: Disabled for stateless API
-- **Error Handling**: Consistent error responses without sensitive information leakage
-- **Token Expiration**: Configurable session timeout (default: 1 hour)
+- **Password Encryption**: BCrypt with automatic salt generation
+- **Input Validation**: Email format, password strength, required fields
+- **Session Security**: Redis-based token storage with automatic expiration
+- **Error Handling**: No sensitive information in error responses
+- **CSRF Protection**: Disabled for stateless API design
 
 ## 📁 Key Components
 
-### [`LoginService`](src/main/java/com/elainehello/loginsystem/service/auth/LoginService.java)
-
-Handles user authentication logic:
-
-- Email/password verification
-- Password hash validation using BCrypt
-- Token generation via SessionService
-
-### [`SessionService`](src/main/java/com/elainehello/loginsystem/service/auth/SessionService.java)
-
-Manages user sessions:
-
-- Access token creation
-- Token expiration handling
-- Future: Redis integration for distributed sessions
-
-### [`UserRepository`](src/main/java/com/elainehello/loginsystem/repository/UserRepository.java)
-
-Data access layer:
-
-- Find user by email
-- Check email existence
-- JPA integration
-
-### [`GlobalExceptionHandler`](src/main/java/com/elainehello/loginsystem/exception/GlobalExceptionHandler.java)
-
-Centralized exception handling:
-
-- Validation error formatting
-- Runtime exception handling
-- Consistent API error responses
+- **[`LoginService`](src/main/java/com/elainehello/loginsystem/service/auth/LoginService.java)**: User authentication with BCrypt verification
+- **[`SessionService`](src/main/java/com/elainehello/loginsystem/service/auth/SessionService.java)**: Redis-based token management
+- **[`RegistrationService`](src/main/java/com/elainehello/loginsystem/service/auth/RegistrationService.java)**: User account creation
+- **[`GlobalExceptionHandler`](src/main/java/com/elainehello/loginsystem/exception/GlobalExceptionHandler.java)**: Centralized error handling
 
 ## 🚧 Roadmap
 
-- [ ] User Registration endpoint
 - [ ] JWT token implementation
-- [ ] Redis session integration
 - [ ] Email verification
 - [ ] Password reset functionality
-- [ ] Role-based authorization
+- [ ] Role-based authorization (RBAC)
 - [ ] Rate limiting
 - [ ] Refresh token mechanism
-- [ ] API documentation with OpenAPI/Swagger
-
-## 🔧 Configuration
-
-### Application Properties
-
-```properties
-# Application
-spring.application.name=loginsystem
-
-# Database
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-
-# Security
-# (Configure additional security settings as needed)
-```
-
-## 🐳 Docker Support
-
-### Using Testcontainers
-
-The project includes [`TestcontainersConfiguration`](src/test/java/com/elainehello/loginsystem/TestcontainersConfiguration.java) for isolated testing with PostgreSQL containers.
-
-### Run Tests with Testcontainers
-
-```bash
-./mvnw test
-```
+- [ ] OpenAPI/Swagger documentation
+- [ ] Integration tests
 
 ## 🤝 Contributing
 
@@ -276,10 +235,4 @@ This project is licensed under the MIT License.
 
 ---
 
-**Note**: This is a learning project demonstrating Spring Boot authentication patterns. For production use, consider additional security measures such as:
-
-- JWT tokens with proper signing
-- Rate limiting
-- HTTPS enforcement
-- Comprehensive logging
-- Monitoring and alerting
+**Note**: This is a learning project demonstrating modern Spring Boot authentication patterns with Docker Compose integration.

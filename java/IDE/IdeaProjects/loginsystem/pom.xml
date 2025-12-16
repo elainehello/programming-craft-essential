@@ -113,6 +113,15 @@
 			<artifactId>spring-security-jwt</artifactId>
 			<version>1.1.1.RELEASE</version>
 		</dependency>
+		<!-- Add Docker Compose Support  -->
+		<!-- container deployment PostgreSQL/Redis through compose.yaml -->
+		<!-- therefore we skip the manual configuration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>

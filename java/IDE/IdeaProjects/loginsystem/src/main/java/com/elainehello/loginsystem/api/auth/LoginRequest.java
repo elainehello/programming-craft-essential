@@ -17,15 +17,26 @@ public class LoginRequest {
     @JsonProperty("password")
     private String password;
 
+    @NotBlank(message = "First name is required")
+    @JsonProperty("firstName")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    @JsonProperty("lastName")
+    private String lastName;
+
     // constructor for JSON deserialization
     public LoginRequest() {
 
     }
 
     // constructor 
-    public LoginRequest(String email, String password) {
+    public LoginRequest(String email, String password,
+                        String firstName, String lastName) {
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     // Getters and setters
@@ -43,5 +54,21 @@ public class LoginRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+    
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
