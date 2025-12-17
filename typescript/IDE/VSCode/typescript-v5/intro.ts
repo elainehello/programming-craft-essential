@@ -15,3 +15,4 @@ const seven = Symbol("seven")
 function neverReturningFunction(): never {
     throw new Error("This function never returns")
 }
+// let eight: never;
