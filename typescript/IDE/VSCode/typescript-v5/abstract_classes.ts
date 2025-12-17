@@ -5,7 +5,7 @@ to provide specific functionality. This enforces a common interface across deriv
 */
 
 abstract class Animal {
-    abstract makeSound(): void;
+    abstract makeSound(): void; // Abstract method that must be implemented by subclasses
 }
 
 class Dog extends Animal {
