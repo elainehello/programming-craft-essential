@@ -1,0 +1,361 @@
+# Login System - Development Notes
+# ================================
+
+## 🐳 Docker Compose Execution
+## ============================
+
+### Starting Services
+# Start PostgreSQL and Redis containers
+docker compose up -d
+
+# Verify services are running
+docker compose ps
+
+# Expected output:
+# NAME                     IMAGE               COMMAND                  SERVICE    CREATED    STATUS         PORTS
+# loginsystem-postgres-1   postgres:15-alpine  "docker-entrypoint.s…"  postgres   X min ago  Up X seconds   0.0.0.0:5432->5432/tcp
+# loginsystem-redis-1      redis:7-alpine      "docker-entrypoint.s…"  redis      X min ago  Up X seconds   0.0.0.0:6379->6379/tcp
+
+### Service Management
+# View logs
+docker compose logs postgres
+docker compose logs redis
+docker compose logs -f  # Follow all logs
+
+# Stop services
+docker compose stop
+
+# Stop and remove containers
+docker compose down
+
+# Stop and remove containers + volumes (DELETES ALL DATA)
+docker compose down -v
+
+### Database Access
+# Connect to PostgreSQL
+docker compose exec postgres psql -U loginsystem -d loginsystem
+
+# Useful PostgreSQL commands:
+\dt              # List tables
+\d users         # Describe users table
+SELECT * FROM users;  # View all users
+\q               # Quit
+
+# Connect to Redis
+docker compose exec redis redis-cli
+
+# Useful Redis commands:
+KEYS *           # List all keys
+KEYS token:*     # List all tokens
+GET token:1-xxx  # Get specific token
+FLUSHALL         # Clear all data
+EXIT             # Quit
+
+### Troubleshooting
+# Check if ports are in use
+netstat -tulpn | grep :5432
+netstat -tulpn | grep :6379
+
+# Remove all containers and start fresh
+docker compose down -v
+docker system prune -f
+docker compose up -d
+
+## 🚀 Spring Boot Developer Mode
+## =============================
+
+### Running the Application
+# Standard run
+./mvnw spring-boot:run
+
+# Run with specific profile
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Run with debug logging
+./mvnw spring-boot:run -Dspring-boot.run.arguments="--logging.level.com.elainehello.loginsystem=DEBUG"
+
+# Run on different port
+./mvnw spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
+
+### Developer Features
+# Hot reload (if spring-boot-devtools added to pom.xml)
+# Just save files and application restarts automatically
+
+# Debug mode (port 5005)
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+
+# Check application status
+curl http://localhost:8080/actuator/health  # If actuator enabled
+
+### Application Logs
+# Watch logs in real-time
+./mvnw spring-boot:run | grep -E "(ERROR|WARN|INFO)"
+
+# Expected startup messages:
+✅ Test user created: test@example.com / password123
+✅ Started LoginsystemApplication in X.XXX seconds
+
+## 🧪 Testing Registration Flow
+## ============================
+
+### 1. Test User Registration
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "testuser@example.com",
+    "password": "password123",
+    "firstName": "Test",
+    "lastName": "User"
+  }'
+
+# Expected Response:
+# HTTP/1.1 200 OK
+# User registered successfully
+
+### 2. Test Duplicate Registration (Should Fail)
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "testuser@example.com",
+    "password": "password123",
+    "firstName": "Test",
+    "lastName": "User"
+  }'
+
+# Expected Response:
+# HTTP/1.1 400 Bad Request
+# User already exists with email: testuser@example.com
+
+### 3. Test Invalid Email Registration
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "invalid-email",
+    "password": "password123",
+    "firstName": "Test",
+    "lastName": "User"
+  }'
+
+# Expected Response:
+# HTTP/1.1 400 Bad Request
+# {"email":"Email should be valid"}
+
+### 4. Test Weak Password
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "newuser@example.com",
+    "password": "123",
+    "firstName": "Test",
+    "lastName": "User"
+  }'
+
+# Expected Response:
+# HTTP/1.1 400 Bad Request
+# {"password":"Password must be at least 6 characters"}
+
+### 5. Test Missing Fields
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "newuser@example.com",
+    "password": "password123"
+  }'
+
+# Expected Response:
+# HTTP/1.1 400 Bad Request
+# {"firstName":"First name is required","lastName":"Last name is required"}
+
+## 🔐 Complete Authentication Flow Test
+## ====================================
+
+### Step 1: Register New User
+curl -X POST http://localhost:8080/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "flowtest@example.com",
+    "password": "password123",
+    "firstName": "Flow",
+    "lastName": "Test"
+  }'
+
+### Step 2: Login with New User
+curl -X POST http://localhost:8080/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "flowtest@example.com",
+    "password": "password123"
+  }'
+
+# Expected Response:
+# {"access_token":"2-uuid-string","expires_in":3600}
+# SAVE THE TOKEN for next step!
+
+### Step 3: Logout
+curl -X POST http://localhost:8080/api/v1/auth/logout \
+  -H "Authorization: Bearer 2-your-token-here"
+
+# Expected Response:
+# HTTP/1.1 200 OK
+
+### Step 4: Try Using Invalid Token
+curl -X POST http://localhost:8080/api/v1/auth/logout \
+  -H "Authorization: Bearer invalid-token"
+
+# Expected Response:
+# HTTP/1.1 400 Bad Request
+
+## 📝 Development Workflow
+## =======================
+
+### Daily Development Routine
+1. Start Docker services:
+   docker compose up -d
+
+2. Start Spring Boot application:
+   ./mvnw spring-boot:run
+
+3. Test endpoints with curl commands above
+
+4. Make code changes (application auto-restarts with devtools)
+
+5. Stop application: Ctrl+C
+
+6. Stop Docker services:
+   docker compose down
+
+### Reset Development Environment
+# Complete reset (deletes all data)
+docker compose down -v
+./mvnw clean
+./mvnw spring-boot:run
+
+### Useful Debugging Commands
+# Check application properties
+curl http://localhost:8080/actuator/configprops  # If actuator enabled
+
+# Check environment
+curl http://localhost:8080/actuator/env  # If actuator enabled
+
+# Monitor Redis tokens
+docker compose exec redis redis-cli
+MONITOR  # Shows real-time Redis commands
+
+# Monitor PostgreSQL queries
+# Check application logs for SQL statements (spring.jpa.show-sql=true)
+
+## 🚨 Troubleshooting
+## ==================
+
+### Application Won't Start
+1. Check Docker services:
+   docker compose ps
+
+2. Check ports:
+   netstat -tulpn | grep -E "(5432|6379|8080)"
+
+3. Clean and rebuild:
+   ./mvnw clean compile
+
+4. Check application.properties credentials
+
+### Database Connection Issues
+# Test PostgreSQL connection manually
+docker compose exec postgres psql -U loginsystem -d loginsystem -c "SELECT 1;"
+
+# Check Redis connection
+docker compose exec redis redis-cli ping
+
+### Authentication Not Working
+1. Check user exists:
+   docker compose exec postgres psql -U loginsystem -d loginsystem -c "SELECT * FROM users;"
+
+2. Check token in Redis:
+   docker compose exec redis redis-cli KEYS "token:*"
+
+3. Verify password encoding:
+   # Check logs for BCrypt hash generation
+
+### Common Error Solutions
+# Error: "Port 8080 already in use"
+# Solution: Kill process or use different port
+lsof -ti:8080 | xargs kill -9
+# OR
+./mvnw spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
+
+# Error: "Database connection refused"
+# Solution: Restart PostgreSQL
+docker compose restart postgres
+
+# Error: "Redis connection timeout"
+# Solution: Restart Redis
+docker compose restart redis
+
+## 📊 Monitoring & Logs
+## ====================
+
+### Application Logs
+# Real-time logs with colors (if supported)
+./mvnw spring-boot:run | sed 's/ERROR/\x1b[31m&\x1b[0m/g' | sed 's/WARN/\x1b[33m&\x1b[0m/g'
+
+### Docker Logs
+# All services
+docker compose logs -f
+
+# Specific service
+docker compose logs -f postgres
+docker compose logs -f redis
+
+### Database Monitoring
+# Monitor connections
+docker compose exec postgres psql -U loginsystem -d loginsystem -c "SELECT * FROM pg_stat_activity;"
+
+# Check table sizes
+docker compose exec postgres psql -U loginsystem -d loginsystem -c "SELECT schemaname,tablename,attname,n_distinct,correlation FROM pg_stats;"
+
+## 🎯 Performance Tips
+## ===================
+
+### Speed up startup
+# Use Maven daemon
+./mvnw -T 4 spring-boot:run  # Use 4 threads
+
+# Skip tests during development
+./mvnw spring-boot:run -DskipTests
+
+### Docker optimization
+# Use specific versions in compose.yaml (already done)
+# Preallocate container resources if needed
+
+### Memory settings
+# Increase heap size if needed
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Xmx512m"
+
+## 📚 Quick Reference
+## ==================
+
+### Useful URLs (when running)
+- Application: http://localhost:8080
+- PostgreSQL: localhost:5432 (user: loginsystem, db: loginsystem)
+- Redis: localhost:6379
+
+### Default Test User
+- Email: test@example.com
+- Password: password123
+
+### Key Files
+- compose.yaml: Docker services
+- application.properties: App configuration
+- pom.xml: Dependencies and build config
+
+## 🎉 Success Indicators
+## =====================
+
+✅ Docker containers running (postgres + redis)
+✅ Spring Boot starts without errors
+✅ Test user created message appears
+✅ Registration returns "User registered successfully"
+✅ Login returns access_token + expires_in
+✅ Logout returns 200 OK
+✅ Database contains user records
+✅ Redis contains session tokens
