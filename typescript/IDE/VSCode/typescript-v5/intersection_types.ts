@@ -1,5 +1,5 @@
 /*
-Intersection types combine multiple types into one using the & operator.
+Intersection types combine multiple types into one using the & (ampersand) operator.
 The resulting type has all properties from both types.
 */
 
