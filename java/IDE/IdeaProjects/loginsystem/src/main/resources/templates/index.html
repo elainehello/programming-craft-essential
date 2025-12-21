@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login System</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .container { background: #f5f5f5; padding: 30px; border-radius: 10px; }
+        .btn { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 5px; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Login System</h1>
+        <p>Welcome to your Spring Boot Authentication System!</p>
+        
+        <h3>📱 Web Interface</h3>
+        <a href="/login" class="btn">Login</a>
+        <a href="/register" class="btn">Register</a>
+        
+        <h3>🔧 API Endpoints</h3>
+        <p><strong>Base URL:</strong> <code>http://localhost:9090/api/v1/auth</code></p>
+        <ul>
+            <li><strong>POST</strong> <code>/register</code> - User registration</li>
+            <li><strong>POST</strong> <code>/login</code> - User login</li>
+            <li><strong>POST</strong> <code>/logout</code> - User logout</li>
+        </ul>
+        
+        <h3>🧪 Test with curl</h3>
+        <pre>
+# Register
+curl -X POST http://localhost:9090/api/v1/auth/register \
+-H "Content-Type: application/json" \
+-d '{"email": "test@example.com", "password": "password123", "firstName": "Test", "lastName": "User"}'
+
+# Login
+curl -X POST http://localhost:9090/api/v1/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email": "test@example.com", "password": "password123"}'
+        </pre>
+    </div>
+</body>
+</html>
