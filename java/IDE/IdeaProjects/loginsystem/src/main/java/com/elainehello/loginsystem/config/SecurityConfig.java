@@ -19,6 +19,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        // Allow Swagger UI and OpenAPI endpoints
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
                         .anyRequest().permitAll() // Temporarily allow everything for testing
                 )
                 .formLogin(form -> form.disable())
