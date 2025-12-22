@@ -6,7 +6,7 @@
 #include <string.h>
 
 
-void is_numberic(int x, int y);
+void is_numeric(int x, int y);
 void is_float(float x, float y);
 
 

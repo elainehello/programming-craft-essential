@@ -10,7 +10,7 @@ int main(void) {
 
     printf("Enter integer value:\n");
     scanf("%d %d", &nbr1, &nbr2);    
-    is_numberic(nbr1, nbr2);
+    is_numeric(nbr1, nbr2);
     
     printf("Enter float value:\n");
     scanf("%f %f", &fnbr1, &fnbr2);

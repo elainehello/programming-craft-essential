@@ -1,7 +1,7 @@
 #include "core.h"
 
-void    is_numberic(int x, int y) {
-    int rs, sub;
+void    is_numeric(int x, int y) {
+    int   rs, sub;
 
     rs = x + y;
     sub = x - y;
