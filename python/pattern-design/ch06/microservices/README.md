@@ -18,6 +18,7 @@ This project demonstrates microservices architecture using gRPC for inter-servic
 ## Setup
 
 1. **Activate the virtual environment:**
+
    ```bash
    source .venv/bin/activate
    ```
@@ -36,6 +37,7 @@ source .venv/bin/activate && cd grpc && python -m grpc_tools.protoc -I. --python
 ```
 
 This command will:
+
 - Activate the virtual environment
 - Navigate to the `grpc` directory
 - Generate `payment_pb2.py` (message classes)
@@ -58,12 +60,14 @@ The payment service is defined in `payment.proto` and provides:
 - **ProcessPayment**: Handles payment processing requests
 
 **Request Message (`PaymentRequest`):**
+
 - `order_id`: Unique order identifier
 - `amount`: Payment amount
 - `currency`: Currency code
 - `user_id`: User identifier
 
 **Response Message (`PaymentResponse`):**
+
 - `payment_id`: Generated payment identifier
 - `status`: Payment status ("SUCCESS", "FAILED", etc.)
 
