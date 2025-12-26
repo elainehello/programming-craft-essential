@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
+from typing import Any
 import grpc
 import payment_pb2
 import payment_pb2_grpc
@@ -6,7 +7,7 @@ import payment_pb2_grpc
 
 
 class PaymentServiceImpl(payment_pb2_grpc.PaymentServiceServicer):
-    def ProcessPayment(self, request, context):
+    def ProcessPayment(self, request: Any, context: Any) -> Any:
         return payment_pb2.PaymentResponse(payment_id="12345", status="SUCCESS")
 
 def main() -> None:

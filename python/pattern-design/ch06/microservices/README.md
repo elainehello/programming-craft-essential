@@ -12,7 +12,9 @@ This project demonstrates microservices architecture using gRPC for inter-servic
 └── grpc/
     ├── payment.proto      # Protocol buffer definition
     ├── payment_pb2.py     # Generated message classes
-    └── payment_pb2_grpc.py # Generated gRPC service stubs
+    ├── payment_pb2_grpc.py # Generated gRPC service stubs
+    ├── payment_service.py # Payment service implementation
+    └── client.py          # Client implementation
 ```
 
 ## Setup
@@ -70,6 +72,48 @@ The payment service is defined in `payment.proto` and provides:
 
 - `payment_id`: Generated payment identifier
 - `status`: Payment status ("SUCCESS", "FAILED", etc.)
+
+## Running the Services
+
+### Start the Payment Service
+
+1. **Activate the virtual environment:**
+
+   ```bash
+   source .venv/bin/activate
+   ```
+
+2. **Navigate to the grpc directory and start the service:**
+
+   ```bash
+   cd grpc
+   # python3 payment_service.py
+   ```
+
+   You should see:
+
+   ```
+   Payment Processing Service ready!
+   ```
+
+   The service will be running on `[::]:50051` (all interfaces, port 50051).
+
+### Run the Client
+
+In another terminal, you can run the client to test the service:
+
+```bash
+source .venv/bin/activate
+cd grpc
+# python3 client.py
+```
+
+You should see:
+
+```
+Payment Service responded.
+Response status: SUCCESS
+```
 
 ## Development Notes
 
