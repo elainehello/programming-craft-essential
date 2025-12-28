@@ -1,6 +1,6 @@
-import { Mandelbrot } from "./mandelbrot";
-import { Julia } from "./julia";
-import { BurningShip } from "./burningShip";
+import { Mandelbrot } from "./mandelbrot.js";
+import { Julia } from "./julia.js";
+import { BurningShip } from "./burningShip.js";
 
 export const fractals = {
     mandelbrot: Mandelbrot,
