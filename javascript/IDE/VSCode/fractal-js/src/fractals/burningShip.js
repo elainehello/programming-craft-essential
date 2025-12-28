@@ -1,4 +1,4 @@
-import { ITERATIONS } from "../core/paramMacros";
+import { ITERATIONS } from "../core/paramMacros.js";
 
 /** Burning Ship fractal implementation */
 export const BurningShip = {

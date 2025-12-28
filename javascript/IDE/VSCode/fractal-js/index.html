@@ -4,19 +4,39 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>fractal-js</title>
+    <title>fractal-js-explorer</title>
   </head>
   <body>
     <div id="controls">
       <label>
-        Re:
-        <input id="real" type="number" step="0.01" value="-0.07">
+        Fractal:
+        <select id="fractal-select">
+          <option value="mandelbrot">Mandelbrot Set</option>
+          <option value="julia">Julia Set</option>
+          <option value="burningShip">Burning Ship</option>
+        </select>
       </label>
 
-      <label>
-        Im:
-        <input id="imag" type="number" step="0.01" value="0.27015">
-      </label>
+      <div class="julia-controls">
+        <label>
+          Re:
+          <input id="real" type="number" step="0.01" value="-0.7">
+        </label>
+  
+        <label>
+          Im:
+          <input id="imag" type="number" step="0.01" value="0.27015">
+        </label>
+      </div>
+
+      <div class="help">
+        <small>
+          <strong>Controls:</strong><br>
+          Mouse: Drag to pan, wheel to zoom<br>
+          Keys: WASD/Arrows to move<br>
+          +/- to zoom, R to reset
+        </small>
+      </div>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>

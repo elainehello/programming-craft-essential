@@ -1,4 +1,4 @@
-import { ITERATIONS } from "../core/paramMacros";
+import { ITERATIONS } from "../core/paramMacros.js";
 
 /** Mandelbrot fractal implementation */
 export const Mandelbrot = {
