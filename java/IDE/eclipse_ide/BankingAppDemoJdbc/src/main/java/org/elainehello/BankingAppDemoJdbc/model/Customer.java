@@ -2,6 +2,8 @@ package org.elainehello.BankingAppDemoJdbc.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+//(*) look at java.util.Objects Java 21 Docs API
+import java.util.Objects;
 
 /**
  * SOLID - SRP: this class is ONLY responsable for representing customer
@@ -20,7 +22,7 @@ public class Customer {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructor
+    // Constructors
     public Customer() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -35,6 +37,12 @@ public class Customer {
         this.lastName = lastName;
         this.email = email;
         this.balance = balance;
+    }
+
+    // Business method following SRP - onlu updates what belongs to Customer
+    public void updateBalance(BigDecimal newBalance) {
+        this.balance = newBalance;
+        this.updatedAt = LocalDateTime.now();
     }
 
     // Getter and Setter
@@ -108,5 +116,36 @@ public class Customer {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Customer customer = (Customer) o;
+        return Objects.equals(customerId, customer.customerId) &&
+                Objects.equals(username, customer.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(customerId, username);
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId=" + customerId +
+                ", username=" + username + '\'' +
+                ", firstName=" + firstName + '\'' +
+                ", lastName=" + lastName + '\'' +
+                ", email=" + email + '\'' +
+                ", balance=" + balance + '\'' +
+                ", createAt=" + createdAt + '\'' +
+                '}';
     }
 }

@@ -22,11 +22,11 @@ public class AmountValidationStrategy implements ValidationStrategyInterface{
             return false;
         }
         if (amount.compareTo(MIN_TRANSFER_AMOUNT) < 0) {
-            errorMessage = "Transfer amount must be at least" + MIN_TRANSFER_AMOUNT;
+            errorMessage = "Transfer amount must be at least " + MIN_TRANSFER_AMOUNT;
             return false;
         }
         if (amount.compareTo(MAX_TRANSFER_AMOUNT) > 0) {
-            errorMessage = "Transfer amount cannot exceed" + MAX_TRANSFER_AMOUNT;
+            errorMessage = "Transfer amount cannot exceed " + MAX_TRANSFER_AMOUNT;
             return false;
         }
         return true;
