@@ -3,6 +3,11 @@ package org.elainehello.BankingAppDemoJdbc.model;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * SOLID - SRP: this class is ONLY responsable for representing customer
+ * data; It doesn't handle database operation, business logic, or UI concerns
+ */
+
 public class Customer {
     // attributes - properties
     private Long customerId;
@@ -15,22 +20,21 @@ public class Customer {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Empty constructor
+    // Constructor
     public Customer() {
-
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    // Constructor
     public Customer(String username, String passwordHash, String firstName,
                     String lastName, String email, BigDecimal balance) {
+        this();
         this.username = username;
         this.passwordHash = passwordHash;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.balance = balance;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
 
     // Getter and Setter
