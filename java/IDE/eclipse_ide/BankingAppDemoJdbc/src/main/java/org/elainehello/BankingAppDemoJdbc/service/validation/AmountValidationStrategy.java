@@ -4,6 +4,10 @@ import org.elainehello.BankingAppDemoJdbc.dto.TransferRequest;
 
 import java.math.BigDecimal;
 
+/**
+ * SOLID - OCP: another validation strategy that extends functionality
+ * without modifying existing validation logic
+ */
 public class AmountValidationStrategy implements ValidationStrategyInterface{
     private static final BigDecimal MIN_TRANSFER_AMOUNT = new BigDecimal("0.01");
     private static final BigDecimal MAX_TRANSFER_AMOUNT = new BigDecimal("10000.00");

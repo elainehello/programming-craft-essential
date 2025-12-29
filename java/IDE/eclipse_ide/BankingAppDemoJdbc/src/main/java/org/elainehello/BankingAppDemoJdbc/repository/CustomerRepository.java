@@ -11,5 +11,6 @@ public interface CustomerRepository {
     Optional<Customer> findByUsername(String username);
     Optional<Customer> findById(Long customerId);
     boolean updateBalance(Long customerId, BigDecimal newBalance);
+    boolean existsById(Long Id);
     boolean existsByUsername(String username);
 }
