@@ -1,0 +1,6 @@
+├── config/                   # Configuration Management
+│   ├── DatabaseConfig.java  # Database connection & pooling
+│   └── ApplicationContext.java # Dependency injection
+├── exception/                # Custom Exception Handling
+├── util/                     # Utility Classes
+└── ui/                       # Console Interface
