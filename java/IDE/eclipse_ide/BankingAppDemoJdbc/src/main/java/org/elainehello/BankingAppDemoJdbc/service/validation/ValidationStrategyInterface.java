@@ -1,5 +1,7 @@
 package org.elainehello.BankingAppDemoJdbc.service.validation;
 
+import org.elainehello.BankingAppDemoJdbc.dto.TransferRequest;
+
 /**
  * Open/Closed Principle (OCP)
  * SOLID - OCP: Define interface for validation strategy
