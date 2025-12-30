@@ -4,7 +4,7 @@ class SocketHandler {
     constructor(io) {
         this.io = io;
         this.connectedUsers = new Map();
-        this.chatRooms = new Map;
+        this.chatRooms = new Map();
     }
 
     handleConnection(socket) {
@@ -21,7 +21,7 @@ class SocketHandler {
         });
 
         // Handle user disconnect
-        socket.on('disconnet', (data) => {
+        socket.on('disconnect', () => {
             this.handleDisconnect(socket, data);
         });
     }
@@ -85,7 +85,7 @@ class SocketHandler {
             username: username || userInfo.username,
             message,
             roomId,
-            timestamp: new DataTransfer(),
+            timestamp: new Date(),
             userId: socket.id
         };
 
@@ -123,14 +123,14 @@ class SocketHandler {
 
     addUserToRoom(socketId, roomId, userInfo) {
         if (!this.chatRooms.has(roomId)) {
-            this.chatRooms.get(roomId, new Map());
+            this.chatRooms.set(roomId, new Map());
         }
         this.chatRooms.get(roomId).set(socketId, userInfo);
     }
 
     removeUserFromRoom(socketId, roomId) {
         if (this.chatRooms.has(roomId)) {
-            this.chatRooms.get(socketId).delete(socketId);
+            this.chatRooms.get(roomId).delete(socketId);
 
             // Clean up empty rooms
             if (this.chatRooms.get(roomId).size === 0) {
@@ -151,7 +151,7 @@ class SocketHandler {
         }));
     }
 
-    getRoomList() {
+    getRoomsList() {
         return Array.from(this.chatRooms.keys()).map(roomId => ({
             roomId,
             userCount: this.chatRooms.get(roomId).size,

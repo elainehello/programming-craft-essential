@@ -3,11 +3,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var http = require('http');
-var socketIo = this.request('socket.io');
+var socketIo = require('socket.io');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var chatRouter = requere('./src/routes/chat');
+var chatRouter = require('./src/routes/chat');
 
 var SocketHandler = require('./src/socket/socketHandler');
 

@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/rooms', function(req, res, next) {
     // This will be populated by socket handler
     const socketHandler = req.app.get('socketHandler');
-    const rooms = socketHandler ? socketHandler.getRoomList() : [];
+    const rooms = socketHandler ? socketHandler.getRoomsList() : [];
 
     res.json({
         success: true,
