@@ -1,0 +1,7 @@
+Create backend project directory
+/# npm install -g express-generator
+/# express chat-backend --no-view
+/# cd chat-backend
+/# npm install
+/# npm start
+
