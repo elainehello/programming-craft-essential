@@ -57,7 +57,7 @@ export PATH="$PATH:$HOME/.dotnet"
 
 ## Add to ~/.profile (login shells)
 
-![Add to ~/.profile (login shells)](images/image2.pngandelbrot.png)
+![Add to ~/.profile (login shells)](images/image2.png)
 ```bash
 # Load bashrc for interactive shells
 if [ -n "$BASH_VERSION" ]; then
